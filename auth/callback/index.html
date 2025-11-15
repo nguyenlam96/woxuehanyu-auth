@@ -231,7 +231,8 @@
         verifyToken,
         verificationType,
         accessToken: accessToken ? 'Present' : 'Missing',
-        errorCode
+        errorCode,
+        fullURL: window.location.href
       });
 
       // Case 1: Có access token trong hash (sau khi Supabase redirect)
@@ -253,16 +254,22 @@
         // Supabase sẽ tự động xử lý và redirect lại với hash fragment
         // Page sẽ reload với access_token trong hash
       }
-      // Case 4: Không có gì - link không hợp lệ
+      // Case 4: Đang ở callback page (sau khi Supabase verify thành công)
+      // Supabase với PKCE flow không trả token trong URL, app sẽ lấy session sau
       else {
         setTimeout(() => {
+          const universalLink = UNIVERSAL_LINK_BASE;
           updateUI(`
-            <div class="logo">❓</div>
-            <h1>Link Không Hợp Lệ</h1>
-            <p class="message">Không tìm thấy thông tin xác thực trong link.</p>
-            <p class="message">Vui lòng kiểm tra email hoặc yêu cầu gửi lại link xác nhận.</p>
+            <div class="success-icon">✓</div>
+            <h1>Email Đã Xác Nhận!</h1>
+            <p class="message">Tài khoản của bạn đã được kích hoạt thành công.</p>
+            <p class="message">Vui lòng mở app <strong>WoXueHanyu</strong> để tiếp tục.</p>
+            <a href="${universalLink}" class="button">🚀 Mở WoXueHanyu App</a>
+            <div class="info">
+              💡 Click vào nút bên trên để mở app và đăng nhập.
+            </div>
           `);
-        }, 1000);
+        }, 500);
       }
     };
   </script>
