@@ -187,8 +187,8 @@
     const errorCode = hashParams.get('error_code');
     const errorDescription = hashParams.get('error_description');
 
-    // Universal link URL - use /auth/success để tránh reload trang hiện tại
-    const UNIVERSAL_LINK_URL = 'https://nguyenlam96.github.io/woxuehanyu-auth/auth/success';
+    // Deep link URL
+    const DEEP_LINK_URL = 'woxuehanyu://auth/callback';
 
     function updateUI(content) {
       document.getElementById('status').innerHTML = content;
@@ -201,13 +201,13 @@
         <h1>Email Đã Xác Nhận!</h1>
         <p class="message">Tài khoản của bạn đã được kích hoạt thành công.</p>
         <p class="message">Đang mở app <strong>WoXueHanyu</strong>...</p>
-        <a href="${UNIVERSAL_LINK_URL}" class="button">🚀 Mở WoXueHanyu App</a>
+        <a href="${DEEP_LINK_URL}" class="button">🚀 Mở WoXueHanyu App</a>
         <div class="info">
           💡 Nếu app không tự động mở, vui lòng click vào nút bên trên.
         </div>
       `);
 
-      console.log('Universal link ready:', UNIVERSAL_LINK_URL);
+      console.log('Deep link ready:', DEEP_LINK_URL);
     }
 
     function showVerifyingUI() {
@@ -258,7 +258,7 @@
             <h1>Email Đã Xác Nhận!</h1>
             <p class="message">Tài khoản của bạn đã được kích hoạt thành công.</p>
             <p class="message">Vui lòng mở app <strong>WoXueHanyu</strong> để tiếp tục.</p>
-            <a href="${UNIVERSAL_LINK_URL}" class="button">🚀 Mở WoXueHanyu App</a>
+            <a href="${DEEP_LINK_URL}" class="button">🚀 Mở WoXueHanyu App</a>
             <div class="info">
               💡 Click vào nút bên trên để mở app và đăng nhập.
             </div>
