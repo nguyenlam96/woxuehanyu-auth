@@ -187,32 +187,27 @@
     const errorCode = hashParams.get('error_code');
     const errorDescription = hashParams.get('error_description');
 
-    // Universal link base URL (GitHub Pages domain)
-    const UNIVERSAL_LINK_BASE = 'https://nguyenlam96.github.io/woxuehanyu-auth/auth/callback';
+    // Universal link URL - use /auth/success để tránh reload trang hiện tại
+    const UNIVERSAL_LINK_URL = 'https://nguyenlam96.github.io/woxuehanyu-auth/auth/success';
 
     function updateUI(content) {
       document.getElementById('status').innerHTML = content;
     }
 
     function showSuccessAndRedirect() {
-      // Tạo universal link với hash fragment
-      const universalLink = UNIVERSAL_LINK_BASE + hash;
-
       // Hiển thị success UI ngay lập tức
       updateUI(`
         <div class="success-icon">✓</div>
         <h1>Email Đã Xác Nhận!</h1>
         <p class="message">Tài khoản của bạn đã được kích hoạt thành công.</p>
         <p class="message">Đang mở app <strong>WoXueHanyu</strong>...</p>
-        <a href="${universalLink}" class="button">🚀 Mở WoXueHanyu App</a>
+        <a href="${UNIVERSAL_LINK_URL}" class="button">🚀 Mở WoXueHanyu App</a>
         <div class="info">
           💡 Nếu app không tự động mở, vui lòng click vào nút bên trên.
         </div>
       `);
 
-      // Universal links hoạt động tự động khi user đang ở trên trang
-      // Không cần redirect programmatically, app sẽ intercept URL này
-      console.log('Universal link ready:', universalLink);
+      console.log('Universal link ready:', UNIVERSAL_LINK_URL);
     }
 
     function showVerifyingUI() {
@@ -258,13 +253,12 @@
       // Supabase với PKCE flow không trả token trong URL, app sẽ lấy session sau
       else {
         setTimeout(() => {
-          const universalLink = UNIVERSAL_LINK_BASE;
           updateUI(`
             <div class="success-icon">✓</div>
             <h1>Email Đã Xác Nhận!</h1>
             <p class="message">Tài khoản của bạn đã được kích hoạt thành công.</p>
             <p class="message">Vui lòng mở app <strong>WoXueHanyu</strong> để tiếp tục.</p>
-            <a href="${universalLink}" class="button">🚀 Mở WoXueHanyu App</a>
+            <a href="${UNIVERSAL_LINK_URL}" class="button">🚀 Mở WoXueHanyu App</a>
             <div class="info">
               💡 Click vào nút bên trên để mở app và đăng nhập.
             </div>
