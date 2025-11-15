@@ -1,0 +1,19 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "4W3729C9FG.com.example.woxuehanyu",
+        "paths": [
+          "/auth/callback",
+          "/auth/*"
+        ]
+      }
+    ]
+  },
+  "webcredentials": {
+    "apps": [
+      "4W3729C9FG.com.example.woxuehanyu"
+    ]
+  }
+}
