@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WoXueHanyu - Email Verified</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    
+    .container {
+      background: white;
+      border-radius: 24px;
+      padding: 48px 40px;
+      max-width: 420px;
+      width: 100%;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      text-align: center;
+      animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .logo {
+      font-size: 64px;
+      margin-bottom: 24px;
+      animation: bounceIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+    }
+    
+    @keyframes bounceIn {
+      0% {
+        transform: scale(0);
+      }
+      50% {
+        transform: scale(1.1);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+    
+    .success-icon {
+      width: 88px;
+      height: 88px;
+      background: linear-gradient(135deg, #10b981, #059669);
+      border-radius: 50%;
+      margin: 0 auto 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 52px;
+      color: white;
+      box-shadow: 0 8px 24px rgba(16, 185, 129, 0.4);
+      animation: scaleIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.4s both;
+    }
+    
+    @keyframes scaleIn {
+      from {
+        transform: scale(0) rotate(-180deg);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
+      }
+    }
+    
+    h1 {
+      color: #111827;
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      animation: fadeIn 0.6s ease-out 0.6s both;
+    }
+    
+    .message {
+      color: #6b7280;
+      font-size: 16px;
+      margin: 16px 0;
+      line-height: 1.6;
+      animation: fadeIn 0.6s ease-out 0.7s both;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    .loader {
+      border: 4px solid #f3f4f6;
+      border-top: 4px solid #667eea;
+      border-radius: 50%;
+      width: 56px;
+      height: 56px;
+      animation: spin 1s linear infinite;
+      margin: 24px auto;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .button {
+      display: inline-block;
+      padding: 16px 32px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      text-decoration: none;
+      border-radius: 16px;
+      font-weight: 600;
+      font-size: 16px;
+      margin-top: 24px;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+      animation: fadeIn 0.6s ease-out 0.8s both;
+    }
+    
+    .button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(102, 126, 234, 0.5);
+    }
+    
+    .button:active {
+      transform: translateY(0);
+    }
+    
+    .info {
+      margin-top: 24px;
+      padding: 16px;
+      background: #f9fafb;
+      border-radius: 12px;
+      font-size: 14px;
+      color: #6b7280;
+      animation: fadeIn 0.6s ease-out 0.9s both;
+    }
+    
+    .error {
+      color: #ef4444;
+      margin-top: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div id="status">
+      <div class="logo">🎓</div>
+      <div class="loader"></div>
+      <p class="message">Đang xác nhận email của bạn...</p>
+    </div>
+  </div>
+
+  <script>
+    // Lấy hash fragment từ URL (chứa access_token)
+    const hash = window.location.hash;
+    const searchParams = new URLSearchParams(hash.substring(1));
+    const accessToken = searchParams.get('access_token');
+    const refreshToken = searchParams.get('refresh_token');
+    const errorCode = searchParams.get('error_code');
+    const errorDescription = searchParams.get('error_description');
+    
+    // Deep link scheme
+    const DEEP_LINK_SCHEME = 'woxuehanyu://login-callback';
+    
+    function updateUI(content) {
+      document.getElementById('status').innerHTML = content;
+    }
+    
+    function redirectToApp() {
+      const deepLink = DEEP_LINK_SCHEME + hash;
+      console.log('Redirecting to:', deepLink);
+      
+      // Thử mở app
+      window.location.href = deepLink;
+      
+      // Fallback: Hiển thị UI sau 2 giây
+      setTimeout(() => {
+        if (accessToken) {
+          updateUI(`
+            <div class="success-icon">✓</div>
+            <h1>Email Đã Xác Nhận!</h1>
+            <p class="message">Tài khoản của bạn đã được kích hoạt thành công.</p>
+            <p class="message">Vui lòng mở app <strong>WoXueHanyu</strong> để tiếp tục.</p>
+            <a href="${deepLink}" class="button">🚀 Mở WoXueHanyu App</a>
+            <div class="info">
+              💡 Nếu app không tự động mở, vui lòng click vào nút bên trên hoặc mở app thủ công.
+            </div>
+          `);
+        } else if (errorCode) {
+          updateUI(`
+            <div class="logo">⚠️</div>
+            <h1>Có Lỗi Xảy Ra</h1>
+            <p class="message error">${errorDescription || 'Link không hợp lệ hoặc đã hết hạn.'}</p>
+            <p class="message">Vui lòng thử đăng ký lại hoặc liên hệ hỗ trợ.</p>
+          `);
+        } else {
+          updateUI(`
+            <div class="logo">❌</div>
+            <h1>Link Không Hợp Lệ</h1>
+            <p class="message">Link xác nhận không đúng định dạng hoặc đã hết hạn.</p>
+            <p class="message">Vui lòng kiểm tra email hoặc yêu cầu gửi lại link xác nhận.</p>
+          `);
+        }
+      }, 2000);
+    }
+    
+    // Chạy khi page load
+    window.onload = function() {
+      console.log('Hash:', hash);
+      console.log('Access Token:', accessToken ? 'Present' : 'Missing');
+      
+      if (hash && (accessToken || errorCode)) {
+        redirectToApp();
+      } else {
+        setTimeout(() => {
+          updateUI(`
+            <div class="logo">❓</div>
+            <h1>Link Không Hợp Lệ</h1>
+            <p class="message">Không tìm thấy thông tin xác thực trong link.</p>
+          `);
+        }, 1000);
+      }
+    };
+  </script>
+</body>
+</html>
