@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -169,17 +169,17 @@
     <div id="status">
       <div class="logo">🎓</div>
       <div class="loader"></div>
-      <p class="message">Đang xác nhận email của bạn...</p>
+      <p class="message">Verifying your email...</p>
     </div>
   </div>
 
   <script>
-    // Lấy query params từ URL (từ email link)
+    // Get query params from URL (from email link)
     const urlParams = new URLSearchParams(window.location.search);
     const verifyToken = urlParams.get('token');
     const verificationType = urlParams.get('type');
 
-    // Lấy hash fragment từ URL (chứa access_token sau khi Supabase redirect)
+    // Get hash fragment from URL (contains access_token after Supabase redirect)
     const hash = window.location.hash;
     const hashParams = new URLSearchParams(hash.substring(1));
     const accessToken = hashParams.get('access_token');
@@ -195,15 +195,15 @@
     }
 
     function showSuccessAndRedirect() {
-      // Hiển thị success UI ngay lập tức
+      // Display success UI immediately
       updateUI(`
         <div class="success-icon">✓</div>
-        <h1>Email Đã Xác Nhận!</h1>
-        <p class="message">Tài khoản của bạn đã được kích hoạt thành công.</p>
-        <p class="message">Đang mở app <strong>WoXueHanyu</strong>...</p>
-        <a href="${DEEP_LINK_URL}" class="button">🚀 Mở WoXueHanyu App</a>
+        <h1>Email Verified!</h1>
+        <p class="message">Your account has been successfully activated.</p>
+        <p class="message">Opening <strong>WoXueHanyu</strong> app...</p>
+        <a href="${DEEP_LINK_URL}" class="button">🚀 Open WoXueHanyu App</a>
         <div class="info">
-          💡 Nếu app không tự động mở, vui lòng click vào nút bên trên.
+          💡 If the app doesn't open automatically, please click the button above.
         </div>
       `);
 
@@ -211,16 +211,16 @@
     }
 
     function showVerifyingUI() {
-      // Hiển thị UI xác nhận khi user vừa click vào email
+      // Display verification UI when user just clicked email
       updateUI(`
         <div class="success-icon">✓</div>
-        <h1>Đang Xác Nhận Email...</h1>
-        <p class="message">Tài khoản của bạn đang được kích hoạt.</p>
-        <p class="message">Vui lòng đợi trong giây lát...</p>
+        <h1>Verifying Email...</h1>
+        <p class="message">Your account is being activated.</p>
+        <p class="message">Please wait a moment...</p>
       `);
     }
 
-    // Chạy khi page load
+    // Run when page loads
     window.onload = function() {
       console.log('URL Params:', {
         verifyToken,
@@ -230,37 +230,37 @@
         fullURL: window.location.href
       });
 
-      // Case 1: Có access token trong hash (sau khi Supabase redirect)
+      // Case 1: Has access token in hash (after Supabase redirect)
       if (accessToken) {
         showSuccessAndRedirect();
       }
-      // Case 2: Có error trong hash
+      // Case 2: Has error in hash
       else if (errorCode) {
         updateUI(`
           <div class="logo">⚠️</div>
-          <h1>Có Lỗi Xảy Ra</h1>
-          <p class="message error">${errorDescription || 'Link không hợp lệ hoặc đã hết hạn.'}</p>
-          <p class="message">Vui lòng thử đăng ký lại hoặc liên hệ hỗ trợ.</p>
+          <h1>An Error Occurred</h1>
+          <p class="message error">${errorDescription || 'Link is invalid or has expired.'}</p>
+          <p class="message">Please try registering again or contact support.</p>
         `);
       }
-      // Case 3: Có verify token trong query params (user vừa click email)
+      // Case 3: Has verify token in query params (user just clicked email)
       else if (verifyToken && verificationType) {
         showVerifyingUI();
-        // Supabase sẽ tự động xử lý và redirect lại với hash fragment
-        // Page sẽ reload với access_token trong hash
+        // Supabase will automatically process and redirect back with hash fragment
+        // Page will reload with access_token in hash
       }
-      // Case 4: Đang ở callback page (sau khi Supabase verify thành công)
-      // Supabase với PKCE flow không trả token trong URL, app sẽ lấy session sau
+      // Case 4: On callback page (after Supabase verify success)
+      // Supabase with PKCE flow doesn't return token in URL, app will get session later
       else {
         setTimeout(() => {
           updateUI(`
             <div class="success-icon">✓</div>
-            <h1>Email Đã Xác Nhận!</h1>
-            <p class="message">Tài khoản của bạn đã được kích hoạt thành công.</p>
-            <p class="message">Vui lòng mở app <strong>WoXueHanyu</strong> để tiếp tục.</p>
-            <a href="${DEEP_LINK_URL}" class="button">🚀 Mở WoXueHanyu App</a>
+            <h1>Email Verified!</h1>
+            <p class="message">Your account has been successfully activated.</p>
+            <p class="message">You're all set! Return to the app and sign in with your account.</p>
+            <a href="${DEEP_LINK_URL}" class="button">🚀 Open WoXueHanyu App</a>
             <div class="info">
-              💡 Click vào nút bên trên để mở app và đăng nhập.
+              💡 Click the button above to open the app and sign in.
             </div>
           `);
         }, 500);
