@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Wo xue Hanyu</title>
   <link rel="icon" href="/assets/app_icon.png">
-  <meta name="description" content="Download the Wo xue Hanyu app to view this video.">
+  <meta name="description" content="Download the Wo xue Hanyu app to read this text.">
   <meta name="apple-itunes-app" content="app-id=6754384426">
   <style>
     :root {
@@ -96,7 +96,6 @@
     }
 
     .video-meta {
-      display: none;
       margin-bottom: 20px;
       padding: 14px 16px;
       border: 1px solid var(--border);
@@ -164,20 +163,6 @@
       line-height: 1.5;
     }
 
-    .generic {
-      display: none;
-      margin-top: 18px;
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.6;
-    }
-
-    .generic a {
-      color: var(--brand-strong);
-      text-decoration: none;
-      font-weight: 600;
-    }
-
     @media (max-width: 560px) {
       body {
         padding: 16px;
@@ -210,118 +195,73 @@
         <img src="/assets/app_icon.png" alt="Wo xue Hanyu app icon">
         <h1>Wo xue Hanyu</h1>
       </div>
-      <div id="videoFallback">
-        <div class="headline">Open this video in the app</div>
-        <p class="copy">This shared video link works best inside the Wo xue Hanyu app. Install the app to watch the full video experience.</p>
-      </div>
-      <div id="genericFallback" style="display:none;">
-        <div class="headline">Page not found</div>
-        <p class="copy">The page you requested does not exist. If you were trying to open a shared video link, install the app to continue.</p>
-      </div>
+      <div class="headline">Open this text in the app</div>
+      <p class="copy">This shared reading link works best inside the Wo xue Hanyu app. Install the app to read it with pinyin, word lookup and translation.</p>
     </section>
 
     <section class="content">
-      <div id="videoMeta" class="video-meta"></div>
+      <div id="documentMeta" class="video-meta"></div>
       <div class="actions">
         <a class="button primary" href="https://apps.apple.com/vn/app/wo-xue-hanyu/id6754384426" target="_blank" rel="noopener noreferrer">Download on App Store</a>
         <a class="button secondary" href="https://play.google.com/store/apps/details?id=com.woxuehanyu.prod" target="_blank" rel="noopener noreferrer">Get it on Google Play</a>
       </div>
-      <p class="note" id="noteText">If the app is already installed, open the original link again from your device.</p>
-      <p class="generic" id="genericText"><a href="/">Go back home</a></p>
+      <p class="note">If the app is already installed, open the original link again from your device.</p>
     </section>
   </main>
 
   <script>
     (function () {
       const pathname = window.location.pathname || '';
-      // Each deep-linked path gets the install prompt rather than the generic
-      // not-found page: landing here means the rewrite missed, not that the
-      // shared thing is gone.
-      const deepLinks = [
-        { prefix: '/tube/video/', kind: 'video' },
-        { prefix: '/reading/document/', kind: 'document' }
-      ];
-      const deepLink = deepLinks.find(function (link) {
-        return new RegExp('^' + link.prefix + '[^/]+/?$').test(pathname);
-      });
+      const documentId = pathname.replace(/^\/reading\/document\//, '').replace(/\/$/, '');
       let currentLang = typeof window.getWoXueHanyuLanguage === 'function'
         ? window.getWoXueHanyuLanguage()
         : ((navigator.language || navigator.userLanguage || '').toLowerCase().startsWith('vi') ? 'vi' : 'en');
       const translations = {
         en: {
           title: 'Wo xue Hanyu',
-          videoHeadline: 'Open this video in the app',
-          videoCopy: 'This shared video link works best inside the Wo xue Hanyu app. Install the app to watch the full video experience.',
-          videoLink: 'Video link:',
-          videoNote: 'If the app is already installed, open the original link again from your device.',
-          documentHeadline: 'Open this text in the app',
-          documentCopy: 'This shared reading link works best inside the Wo xue Hanyu app. Install the app to read it with pinyin, word lookup and translation.',
+          headline: 'Open this text in the app',
+          copy: 'This shared reading link works best inside the Wo xue Hanyu app. Install the app to read it with pinyin, word lookup and translation.',
           documentLink: 'Reading link:',
-          documentNote: 'If the app is already installed, open the original link again from your device.',
-          pageHeadline: 'Page not found',
-          pageCopy: 'The page you requested does not exist. If you were trying to open a shared link, install the app to continue.',
+          note: 'If the app is already installed, open the original link again from your device.',
           appStore: 'Download on App Store',
-          playStore: 'Get it on Google Play',
-          home: 'Go back home'
+          playStore: 'Get it on Google Play'
         },
         vi: {
           title: 'Wo xue Hanyu',
-          videoHeadline: 'Mở video này trong ứng dụng',
-          videoCopy: 'Liên kết video này hoạt động tốt nhất trong ứng dụng Wo xue Hanyu. Hãy cài ứng dụng để xem đầy đủ video.',
-          videoLink: 'Liên kết video:',
-          videoNote: 'Nếu bạn đã cài ứng dụng, hãy mở lại liên kết gốc từ thiết bị của bạn.',
-          documentHeadline: 'Mở bài đọc này trong ứng dụng',
-          documentCopy: 'Liên kết bài đọc này hoạt động tốt nhất trong ứng dụng Wo xue Hanyu. Hãy cài ứng dụng để đọc kèm pinyin, tra từ và bản dịch.',
+          headline: 'Mở bài đọc này trong ứng dụng',
+          copy: 'Liên kết bài đọc này hoạt động tốt nhất trong ứng dụng Wo xue Hanyu. Hãy cài ứng dụng để đọc kèm pinyin, tra từ và bản dịch.',
           documentLink: 'Liên kết bài đọc:',
-          documentNote: 'Nếu bạn đã cài ứng dụng, hãy mở lại liên kết gốc từ thiết bị của bạn.',
-          pageHeadline: 'Không tìm thấy trang',
-          pageCopy: 'Trang bạn yêu cầu không tồn tại. Nếu bạn đang mở một liên kết được chia sẻ, hãy cài ứng dụng để tiếp tục.',
+          note: 'Nếu bạn đã cài ứng dụng, hãy mở lại liên kết gốc từ thiết bị của bạn.',
           appStore: 'Tải trên App Store',
-          playStore: 'Tải trên Google Play',
-          home: 'Về trang chủ'
+          playStore: 'Tải trên Google Play'
         }
       };
-      const videoFallback = document.getElementById('videoFallback');
-      const genericFallback = document.getElementById('genericFallback');
-      const videoMeta = document.getElementById('videoMeta');
-      const actions = document.querySelector('.actions');
-      const noteText = document.getElementById('noteText');
-      const genericText = document.getElementById('genericText');
+      const documentMeta = document.getElementById('documentMeta');
       const title = document.querySelector('title');
+      const headline = document.querySelector('.headline');
+      const copy = document.querySelector('.copy');
+      const note = document.querySelector('.note');
       const appStoreBtn = document.querySelector('.button.primary');
       const playStoreBtn = document.querySelector('.button.secondary');
-      const homeLink = document.querySelector('#genericText a');
 
       function render(lang) {
         currentLang = translations[lang] ? lang : 'en';
         const t = translations[currentLang];
         document.documentElement.lang = currentLang;
         title.textContent = t.title;
+        headline.textContent = t.headline;
+        copy.textContent = t.copy;
+        note.textContent = t.note;
         appStoreBtn.textContent = t.appStore;
         playStoreBtn.textContent = t.playStore;
-
-        if (deepLink) {
-        const kind = deepLink.kind;
-        document.querySelector('.headline').textContent = t[kind + 'Headline'];
-        document.querySelector('.copy').textContent = t[kind + 'Copy'];
-        videoMeta.style.display = 'block';
-        videoMeta.textContent = '';
+        documentMeta.textContent = '';
         const label = document.createElement('strong');
-        label.textContent = t[kind + 'Link'] + ' ';
-        const value = document.createElement('span');
-        value.textContent = pathname.slice(deepLink.prefix.length).replace(/\/$/, '');
-        videoMeta.appendChild(label);
-        videoMeta.appendChild(value);
-        noteText.textContent = t[kind + 'Note'];
-        } else {
-        videoFallback.style.display = 'none';
-        genericFallback.style.display = 'block';
-        actions.style.display = 'none';
-        noteText.style.display = 'none';
-        genericText.style.display = 'block';
-        document.querySelector('#genericFallback .headline').textContent = t.pageHeadline;
-        document.querySelector('#genericFallback .copy').textContent = t.pageCopy;
-        homeLink.textContent = t.home;
+        label.textContent = t.documentLink + ' ';
+        documentMeta.appendChild(label);
+        if (documentId) {
+          const value = document.createElement('span');
+          value.textContent = documentId;
+          documentMeta.appendChild(value);
         }
       }
 

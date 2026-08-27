@@ -14,6 +14,10 @@
           {
             "/": "/tube/video/*",
             "comment": "Open shared Tube video in app"
+          },
+          {
+            "/": "/reading/document/*",
+            "comment": "Open shared reading document in app"
           }
         ]
       }
